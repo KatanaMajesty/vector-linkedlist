@@ -68,38 +68,38 @@
 _якщо загальний час всіх кроків разом перевищує 2-4 секунди, то ймовірно
 ваша реалізація деяких методів не є правильною._
 
-Сравнение с std::vector:
-Vector tests:
-Vector 5.1 time: 0.001111
-Vector 5.5 time: 2.3e-05
-Vector summary: 0.001134
+Сравнение с std::vector:  
+Vector tests:  
+Vector 5.1 time: 0.001111  
+Vector 5.5 time: 2.3e-05  
+Vector summary: 0.001134  
 
-Linked List tests:
-Linked List 5.1 time: 0.002021
-Linked List 5.5 time: 8.8e-05
-Linked List summary: 0.002109
+Linked List tests:  
+Linked List 5.1 time: 0.002021  
+Linked List 5.5 time: 8.8e-05  
+Linked List summary: 0.002109  
 
-std::vector tests:
-std::vector 5.1 time: 0.003459
-std::vector 5.5 time: 4.4e-05
-std::vector summary: 0.003503
+std::vector tests:  
+std::vector 5.1 time: 0.003459  
+std::vector 5.5 time: 4.4e-05  
+std::vector summary: 0.003503  
 
-Полный тест:
-Vector tests:
-Vector 5.1 time: 0.001113
-Vector 5.2 time: 1.13741
-Vector 5.3 time: 0.000157
-Vector 5.4 time: 0.5983
-Vector 5.5 time: 2.3e-05
-Vector summary: 1.737
+Полный тест:  
+Vector tests:  
+Vector 5.1 time: 0.001113  
+Vector 5.2 time: 1.13741  
+Vector 5.3 time: 0.000157  
+Vector 5.4 time: 0.5983  
+Vector 5.5 time: 2.3e-05  
+Vector summary: 1.737  
 
-Linked List tests:
-Linked List 5.1 time: 0.002027
-Linked List 5.2 time: 0.002027
-Linked List 5.3 time: 0.95221
-Linked List 5.4 time: 9.1e-05
-Linked List 5.5 time: 8.9e-05
-Linked List summary: 0.954417
+Linked List tests:  
+Linked List 5.1 time: 0.002027  
+Linked List 5.2 time: 0.002027  
+Linked List 5.3 time: 0.95221  
+Linked List 5.4 time: 9.1e-05  
+Linked List 5.5 time: 8.9e-05  
+Linked List summary: 0.954417  
 
 # Дополнительное задание
 ## 1. Розв’язати задачу “Розворот однозв’язного списку”:
