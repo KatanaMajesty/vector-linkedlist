@@ -427,4 +427,31 @@ public:
         delete p;
         _size--;
     }
+    void reverse()
+    {
+        Node* p = head;
+        Node* prev = nullptr;
+        Node* curr = nullptr;
+        while (p != nullptr)
+        {
+            curr = p;
+            p = p->next;
+            curr->next = prev;
+            prev = curr;
+        }
+        head = curr;
+    }
+    int hasCycle()
+    {
+        Node* slow = head;
+        Node* fast = head;
+        while (fast != nullptr && fast->next != nullptr) 
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (fast == slow) 
+                return 1;
+        }     
+        return 0;
+    }
 };
