@@ -194,7 +194,6 @@ LinkedList::LinkedList(const LinkedList& list)
 {
     // std::cout << "LinkedList copy constructor: " << this << std::endl;
     _size = list._size;
-    // std::cout << list._size << std::endl;
     Node* p = list.head;
     Node* _newp;
     Node* buff = nullptr;
@@ -208,7 +207,11 @@ LinkedList::LinkedList(const LinkedList& list)
             _newp->prev->next = _newp;
         
         if (p->next == nullptr) // detect tail
+        {
+            _newp->next = nullptr;
             tail = _newp;
+            break;
+        }
 
         p = p->next;
         buff = _newp;
@@ -252,8 +255,8 @@ void LinkedList::push_back(const HogwartsStudent& student)
     
     _size++;
 
-    if (_size == 1)
-        head = tail;
+    // if (_size == 1)
+    //     head = tail;
 }
 // get a reference of i element of linkedlist or nullptr
 const HogwartsStudent& LinkedList::get(size_t i) const
@@ -262,8 +265,8 @@ const HogwartsStudent& LinkedList::get(size_t i) const
         throw std::out_of_range("size of linkedlist is 0"); 
 
     Node *p = tail;
-    bool _s = (_size - 1) / 2 > i;
     size_t iter = _size - 1;
+    bool _s = (_size - 1) / 2 > i;
     if (_s) // start from head
     {
         p = head;
@@ -286,8 +289,8 @@ HogwartsStudent LinkedList::pop_back()
     if (_size == 0)
         throw std::out_of_range("size of linkedlist is 0");
 
-    HogwartsStudent student = tail->data;
     Node* p = tail;
+    HogwartsStudent student = HogwartsStudent(p->data);
     tail = tail->prev;
     tail->next = nullptr;
     delete p;
@@ -300,8 +303,8 @@ HogwartsStudent LinkedList::pop_front()
     if (_size == 0)
         throw std::out_of_range("size of linkedlist is 0");
     
-    HogwartsStudent student = head->data;
     Node* p = head;
+    HogwartsStudent student = HogwartsStudent(p->data);
     head = head->next;
     head->prev = nullptr;
     delete p;
@@ -321,12 +324,12 @@ void LinkedList::print() const
 }
 void LinkedList::clear() 
 {
-    Node* p = head;
+    // head != nullptr head = head->next
     Node* _assistant_node;
-    while (p != nullptr)
+    while (head != nullptr)
     {
-        _assistant_node = p;
-        p = p->next;
+        _assistant_node = head;
+        head = head->next;
         delete _assistant_node;
     }
     // very important in order to avoid double free()
@@ -370,8 +373,7 @@ void LinkedList::remove(size_t i)
 
     _assistant_node = p->prev;
     _assistant_node->next = p->next;
-    
-    _assistant_node->prev = p->prev;
+    _assistant_node->next->prev = _assistant_node;
     delete p;
     _size--;
 }

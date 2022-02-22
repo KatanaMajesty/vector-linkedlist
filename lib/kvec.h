@@ -69,36 +69,36 @@ public:
 
 class LinkedList
 {
-    struct Node;
+    struct Node; // ok
     
     size_t _size;
     Node* head;
     Node* tail;
 public:
-    // value constructor
-    LinkedList();
+    // default constructor
+    LinkedList(); // ok
     // copy constructor
-    LinkedList(const LinkedList& list);
+    LinkedList(const LinkedList& list); // ok
     // default destructor
-    ~LinkedList();
+    ~LinkedList(); // ok
     // add element to the front of linkedlist
-    void push_front(const HogwartsStudent& student) ;
-    void push_back(const HogwartsStudent& student) ;
+    void push_front(const HogwartsStudent& student); // ok
+    void push_back(const HogwartsStudent& student); // ok
     // get a reference of i element of linkedlist or nullptr
-    const HogwartsStudent& get(size_t i) const;
-    // get last element of linkedlist
-    HogwartsStudent pop_back() __attribute_warn_unused_result__ ;
-    // get first element of linkedlist
-    HogwartsStudent pop_front() __attribute_warn_unused_result__ ;
-
-    inline size_t size() const noexcept { return _size; }
-    void print() const;
-    void clear();
+    const HogwartsStudent& get(size_t i) const; // ok
+    // get and remove last element of linkedlist
+    HogwartsStudent pop_back() __attribute_warn_unused_result__ ; // ok
+    // get and remove first element of linkedlist
+    HogwartsStudent pop_front() __attribute_warn_unused_result__ ; // ok
+    // get size of linkedlist
+    inline size_t size() const noexcept { return _size; } // ok
+    void print() const; // ok
+    void clear(); // ok
     // worst O(n)
-    void insert(const HogwartsStudent& student, size_t i);
-    void remove(size_t i);
-    void reverse();
-    int hasCycle();
+    void insert(const HogwartsStudent& student, size_t i); // ok
+    void remove(size_t i); // ok
+    void reverse(); // ok
+    int hasCycle(); // ok
 };
 
 struct LinkedList::Node
@@ -107,5 +107,5 @@ struct LinkedList::Node
     Node* next;
     Node* prev;
 
-    Node(const HogwartsStudent& student);
+    Node(const HogwartsStudent& student); // ok
 };
