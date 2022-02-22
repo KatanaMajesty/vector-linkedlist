@@ -233,6 +233,9 @@ void LinkedList::push_front(const HogwartsStudent& student)
 {
     // std::cout << "LinkedList push_front of: " << &student << std::endl;
     Node* node = new Node(student);
+    
+    if (head != nullptr)
+        head->prev = node;
 
     node->next = head;
     node->prev = nullptr;
