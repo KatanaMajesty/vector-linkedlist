@@ -255,8 +255,8 @@ void LinkedList::push_back(const HogwartsStudent& student)
     
     _size++;
 
-    // if (_size == 1)
-    //     head = tail;
+    if (_size == 1)
+        head = tail;
 }
 // get a reference of i element of linkedlist or nullptr
 const HogwartsStudent& LinkedList::get(size_t i) const
