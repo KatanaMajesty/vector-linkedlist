@@ -103,7 +103,7 @@ HogwartsStudent Vector::pop_back()
     // std::cout << "copy pop_back of: " << &_data[_size - 1] << std::endl;
     _size--;
     HogwartsStudent p = HogwartsStudent(_data[_size]); 
-    delete &_data[_size];
+    _data[_size].~HogwartsStudent();
     return p;
 }
 const HogwartsStudent& Vector::get(size_t i)
@@ -149,7 +149,7 @@ HogwartsStudent Vector::pop_front()
     for (size_t i = 1; i < _size; i++)
         _data[i - 1] = _data[i];
 
-    delete &_data[_size - 1]; // because there will be a copy at _size - 2
+    _data[_size - 1].~HogwartsStudent(); // because there will be a copy at _size - 2
     _size--;
     return student;
 }
@@ -174,11 +174,11 @@ void Vector::remove(size_t i)
     if (i >= _size)
         throw std::out_of_range("remove method invoked out of vector range");
 
-    delete &_data[i];
+    _data[i].~HogwartsStudent();
     for (int j = i + 1; j < _size; j++)
         _data[j - 1] = _data[j];
     
-    delete &_data[_size - 1]; // delete a copy of _data[_size - 2]
+    _data[_size - 1].~HogwartsStudent(); // delete a copy of _data[_size - 2]
     _size--;
 }
 
