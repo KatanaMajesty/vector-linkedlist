@@ -196,25 +196,19 @@ LinkedList::LinkedList(const LinkedList& list)
     _size = list._size;
     Node* p = list.head;
     Node* _newp;
-    Node* buff = nullptr;
+    Node* _assistant_node = nullptr;
     while (p != nullptr)
     {
         _newp = new Node(p->data);
-        if (buff == nullptr)
-            head = _newp;
-        _newp->prev = buff;
-        if (_newp->prev != nullptr)
-            _newp->prev->next = _newp;
-        
-        if (p->next == nullptr) // detect tail
-        {
-            _newp->next = nullptr;
+        if (p->next == nullptr)
             tail = _newp;
-            break;
-        }
-
+            
         p = p->next;
-        buff = _newp;
+        if (_assistant_node != nullptr)
+            _assistant_node->next = _newp;
+        else head = _newp;
+
+        _assistant_node = _newp;
     }
 }
 // default destructor
@@ -228,12 +222,8 @@ void LinkedList::push_front(const HogwartsStudent& student)
 {
     // std::cout << "LinkedList push_front of: " << &student << std::endl;
     Node* node = new Node(student);
-    
-    if (head != nullptr)
-        head->prev = node;
 
     node->next = head;
-    node->prev = nullptr;
     head = node;
 
     _size++;
@@ -246,11 +236,10 @@ void LinkedList::push_back(const HogwartsStudent& student)
     // std::cout << "LinkedList push_back of: " << &student << std::endl;
     Node* node = new Node(student);
 
+    node->next = nullptr;
     if (tail != nullptr)
         tail->next = node;
 
-    node->next = nullptr;
-    node->prev = tail;
     tail = node;
     
     _size++;
@@ -264,22 +253,16 @@ const HogwartsStudent& LinkedList::get(size_t i) const
     if (_size == 0)
         throw std::out_of_range("size of linkedlist is 0"); 
 
-    Node *p = tail;
-    size_t iter = _size - 1;
-    bool _s = (_size - 1) / 2 > i;
-    if (_s) // start from head
-    {
-        p = head;
-        iter = 0;
-    }
+    Node *p = head;
+    size_t iter = 0;
     
     while (p != nullptr)
     {
         if (iter == i)
             return p->data;
 
-        _s ? iter++ : iter--;
-        p = _s ? p->next : p->prev;
+        iter++;
+        p = p->next;
     }
     throw std::runtime_error("no data was found in linked list");
 }
@@ -289,11 +272,14 @@ HogwartsStudent LinkedList::pop_back()
     if (_size == 0)
         throw std::out_of_range("size of linkedlist is 0");
 
-    Node* p = tail;
-    HogwartsStudent student = HogwartsStudent(p->data);
-    tail = tail->prev;
-    tail->next = nullptr;
-    delete p;
+    Node* p = head;
+    HogwartsStudent student = HogwartsStudent(tail->data);
+    while (p->next->next != nullptr)
+        p = p->next;
+    
+    delete tail;
+    p->next = nullptr;
+    tail = p;
     _size--;
     return student;
 }
@@ -306,7 +292,6 @@ HogwartsStudent LinkedList::pop_front()
     Node* p = head;
     HogwartsStudent student = HogwartsStudent(p->data);
     head = head->next;
-    head->prev = nullptr;
     delete p;
     _size--;
     return student;
@@ -348,14 +333,13 @@ void LinkedList::insert(const HogwartsStudent& student, size_t i)
     Node* _assistant_node;
     Node* _newnode = new Node(student);
 
-    while (j++ < i) // seek for the element to move to right
+    while (j++ < i - 1) // seek for the element to move to left
         p = p->next;
         
-    _assistant_node = p->prev;
-    _assistant_node->next = _newnode;
-    p->prev = _newnode;
-    _newnode->prev = _assistant_node;
-    _newnode->next = p;
+    _newnode->next = p->next;
+    p->next = _newnode;
+    if (p->next == nullptr)
+        tail = _newnode;
 
     _size++;
 }
@@ -368,13 +352,15 @@ void LinkedList::remove(size_t i)
     Node* p = head;
     Node* _assistant_node;
     
-    while (j++ < i)
+    while (j++ < i - 1) // move 1 step left from the element to be deleted
         p = p->next;
 
-    _assistant_node = p->prev;
+    _assistant_node = p;
+    p = p->next;
     _assistant_node->next = p->next;
-    _assistant_node->next->prev = _assistant_node;
     delete p;
+    
+    
     _size--;
 }
 void LinkedList::reverse()

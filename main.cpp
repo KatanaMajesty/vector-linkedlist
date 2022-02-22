@@ -52,7 +52,7 @@ void get_vector_time(Vector& vec)
     // 5.3 vector
     begin = clock();
     for (int i = 0; i < 20000; i++)
-        vec.get(rand() % 60000);
+        vec.get(rand() % 32768);
     end = clock();
     time = double(end - begin) / CLOCKS_PER_SEC;
     summary += time;
@@ -108,7 +108,7 @@ void get_list_time(LinkedList& list)
     // 5.3 list
     begin = clock();
     for (int i = 0; i < 20000; i++)
-        list.get(rand() % 60000);
+        list.get(rand() % 32768);
     end = clock();
     time = double(end - begin) / CLOCKS_PER_SEC;
     summary += time;

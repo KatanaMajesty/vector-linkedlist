@@ -105,7 +105,6 @@ struct LinkedList::Node
 {
     HogwartsStudent data;
     Node* next;
-    Node* prev;
 
     Node(const HogwartsStudent& student); // ok
 };
