@@ -94,18 +94,7 @@ void Vector::push_back(const HogwartsStudent& student)
     if (_size >= _capacity)
         _reallocate(_capacity * 2);
 
-    _data[_size] = student;
-    _size++;
-}
-// rvalue push_back
-void Vector::push_back(HogwartsStudent&& student)
-{
-    // std::cout << "rvalue push_back of: " << &student << std::endl;
-    if (_size >= _capacity)
-        _reallocate(_capacity * 2);
-
-    // CHECK
-    _data[_size] = student;
+    _data[_size] = HogwartsStudent(student);
     _size++;
 }
 // returns last element in vector
@@ -113,8 +102,8 @@ HogwartsStudent Vector::pop_back()
 {
     // std::cout << "copy pop_back of: " << &_data[_size - 1] << std::endl;
     _size--;
-    HogwartsStudent p = _data[_size]; 
-    _data[_size].~HogwartsStudent();
+    HogwartsStudent p = HogwartsStudent(_data[_size]); 
+    delete &_data[_size];
     return p;
 }
 const HogwartsStudent& Vector::get(size_t i)
@@ -135,13 +124,13 @@ void Vector::print() const noexcept
 void Vector::clear()
 {
     _size = 0;
-    _capacity = 0;
+    _capacity = 2;
     delete[] _data;
 }
 // pushes elements at the beginning of vector
 void Vector::push_front(const HogwartsStudent& student)
 {
-    // std::cout << "rvalue push_front of: " << &student << std::endl;
+    // std::cout << "lvalue push_front of: " << &student << std::endl;
     if (_size >= _capacity - 1) // in order to get 1 extra place for new element
         _reallocate(_capacity * 2);
 
@@ -154,11 +143,13 @@ void Vector::push_front(const HogwartsStudent& student)
 // returns first element in vector
 HogwartsStudent Vector::pop_front()
 {
-    // // // std::cout << "copy pop_front of: " << &_data[0] << std::endl;
+    // std::cout << "copy pop_front of: " << &_data[0] << std::endl;
     HogwartsStudent student(_data[0]);
-    for (size_t i = 0; i < _size; i++)
-        _data[i] = _data[i + 1];
 
+    for (size_t i = 1; i < _size; i++)
+        _data[i - 1] = _data[i];
+
+    delete &_data[_size - 1]; // because there will be a copy at _size - 2
     _size--;
     return student;
 }
@@ -168,13 +159,13 @@ void Vector::insert(const HogwartsStudent& student, size_t i)
     if (i >= _size)
         throw std::out_of_range("insert method invoked out of vector range");
 
-    if (_size >= _capacity)
+    if (_size >= _capacity - 1) // for 1 extra element
         _reallocate(_capacity * 2);
 
     for (size_t j = _size; j > i; j--)
         _data[j] = _data[j - 1];
 
-    _data[i] = student;
+    _data[i] = HogwartsStudent(student);
     _size++;
 }
 // worst O(n), average O(_size - i), best O(1)
@@ -183,10 +174,11 @@ void Vector::remove(size_t i)
     if (i >= _size)
         throw std::out_of_range("remove method invoked out of vector range");
 
-    _data[i].~HogwartsStudent();
-    for (int j = i; j < _size; j++)
-        _data[j] = _data[j + 1];
+    delete &_data[i];
+    for (int j = i + 1; j < _size; j++)
+        _data[j - 1] = _data[j];
     
+    delete &_data[_size - 1]; // delete a copy of _data[_size - 2]
     _size--;
 }
 

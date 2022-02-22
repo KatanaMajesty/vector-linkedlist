@@ -33,37 +33,38 @@ class Vector
     void _reallocate(size_t _newcapacity);
 public:
     // default size constructor
-    Vector();
+    Vector(); // ok
     // non-default size constructor
-    Vector(size_t capacity);
+    Vector(size_t capacity); // ok
     // lvalue ref constructor
-    Vector(const Vector& vec);
+    Vector(const Vector& vec); // ok
     // rvalue ref constructor
-    Vector(Vector&& vec) noexcept;
-    ~Vector();
+    Vector(Vector&& vec) noexcept __attribute_deprecated__; // ? есть ли этому практическое применение?
+    ~Vector(); // ok
     // [] operator
-    const HogwartsStudent& operator[](size_t i);
+    const HogwartsStudent& operator[](size_t i); // ok
     // lvalue push_back
-    void push_back(const HogwartsStudent& student);
-    // rvalue push_back
-    void push_back(HogwartsStudent&& student);
-    // returns last element in vector
-    HogwartsStudent pop_back() __attribute_warn_unused_result__;
-    const HogwartsStudent& get(size_t i);
+    void push_back(const HogwartsStudent& student); // ok
+    
+    // pop_back(): Что лучше? Возврат копии или возврат ref или const ref, который потом самостоятельно придётся удалять?
+    // returns and removes last element in vector
+    HogwartsStudent pop_back() __attribute_warn_unused_result__; // ? можно ли реализовать с помощью возврата const ref?
+    // get an i element of vector
+    const HogwartsStudent& get(size_t i); // ok
     // returns current size of vector
-    inline size_t size() const noexcept {return _size;}
+    inline size_t size() const noexcept {return _size;} // ok
     // prints all elements of vector
-    void print() const noexcept;
+    void print() const noexcept; // ok
     // clears all elements of vector
-    void clear();
+    void clear(); // ok, _capacity 0 -> 2
     // pushes elements at the beginning of vector
-    void push_front(const HogwartsStudent& student);
+    void push_front(const HogwartsStudent& student); // ok
     // returns first element in vector
-    HogwartsStudent pop_front() __attribute_warn_unused_result__;
+    HogwartsStudent pop_front() __attribute_warn_unused_result__; // ok
     // worst O(n), average O(_size - i), best O(1)
-    void insert(const HogwartsStudent& student, size_t i);
+    void insert(const HogwartsStudent& student, size_t i); // ok
     // worst O(n), average O(_size - i), best O(1)
-    void remove(size_t i);
+    void remove(size_t i); // ok
 };
 
 class LinkedList

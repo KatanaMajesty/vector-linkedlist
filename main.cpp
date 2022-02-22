@@ -3,6 +3,25 @@
 #include <time.h>
 #include <random>
 
+void get_vector_overall(Vector& vec)
+{
+    clock_t start = clock();
+    for (int i = 0; i < 50000; i++)
+        vec.push_back({static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i});
+    for (int i = 0; i < 10000; i++)
+        vec.push_front({static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i});
+    for (int i = 0; i < 20000; i++)
+        vec.get(rand() % 60000);
+    for (int i = 0; i < 5000; i++)
+        vec.pop_front();
+    for (int i = 0; i < 5000; i++)
+        vec.pop_back();
+
+    clock_t end = clock();
+    double t = double(end - start) / CLOCKS_PER_SEC;
+    std::cout << "overall time: " << t << std::endl;
+}
+
 void get_vector_time(Vector& vec)
 {
     std::cout << "\nVector tests:" << std::endl;
@@ -150,11 +169,13 @@ void get_stdvec_time(std::vector<T>& vec)
 
 int main(void)
 {
-    Vector vec;
+    // Vector vec;
     LinkedList list;
     std::vector<HogwartsStudent> stdvec;
+    Vector vec;
 
     get_vector_time(vec);
+    // get_vector_overall(vec);
     get_list_time(list);
     get_stdvec_time(stdvec);
 }
