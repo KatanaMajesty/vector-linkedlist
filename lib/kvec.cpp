@@ -131,7 +131,7 @@ void Vector::clear()
 void Vector::push_front(const HogwartsStudent& student)
 {
     // std::cout << "lvalue push_front of: " << &student << std::endl;
-    if (_size >= _capacity - 1) // in order to get 1 extra place for new element
+    if (_size >= _capacity)
         _reallocate(_capacity * 2);
 
     for (size_t i = _size; i > 0; i--)
@@ -156,10 +156,10 @@ HogwartsStudent Vector::pop_front()
 // worst O(n), average O(_size - i), best O(1)
 void Vector::insert(const HogwartsStudent& student, size_t i)
 {
-    if (i >= _size)
-        throw std::out_of_range("insert method invoked out of vector range");
+    if (i > _size)
+        i = _size;
 
-    if (_size >= _capacity - 1) // for 1 extra element
+    if (_size >= _capacity)
         _reallocate(_capacity * 2);
 
     for (size_t j = _size; j > i; j--)

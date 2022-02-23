@@ -176,6 +176,26 @@ int main(void)
 
     get_vector_time(vec);
     // get_vector_overall(vec);
-    get_list_time(list);
-    get_stdvec_time(stdvec);
+    // get_list_time(list);
+    // get_stdvec_time(stdvec);
+
+    // Vector v;
+    // HogwartsStudent s;
+    // for (int i = 0; i < 4; i++)
+    //     v.push_back({(char) (i + 65), UNUSUAL, (unsigned int) i * 11});
+
+    // for (int i = 4; i < 8; i++)
+    //     v.push_front({(char) (i + 65), UNUSUAL, (unsigned int) i * 11});
+
+    // v.print();
+    // std::cout << "???" << std::endl;
+
+    // s = v.pop_back();
+    // s = v.pop_front();
+    
+    // v.print();
+    // std::cout << "???" << std::endl;
+
+    // v.insert(s, 5);
+    // v.print();
 }
