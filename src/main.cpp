@@ -1,28 +1,49 @@
-#include <kvec.h>
 #include <iostream>
 #include <time.h>
 #include <random>
 
-void get_vector_overall(Vector& vec)
+#include <chrono>
+
+enum StickType {COMMON, UNUSUAL, RARE, LEGENDARY};
+
+struct HogwartsStudent
 {
-    clock_t start = clock();
-    for (int i = 0; i < 50000; i++)
-        vec.push_back({static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i});
-    for (int i = 0; i < 10000; i++)
-        vec.push_front({static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i});
-    for (int i = 0; i < 20000; i++)
-        vec.get(rand() % 60000);
-    for (int i = 0; i < 5000; i++)
-        vec.pop_front();
-    for (int i = 0; i < 5000; i++)
-        vec.pop_back();
+    char faculty;
+    StickType type;
+    unsigned int employmentPercentage;
 
-    clock_t end = clock();
-    double t = double(end - start) / CLOCKS_PER_SEC;
-    std::cout << "overall time: " << t << std::endl;
-}
+    void Print() const
+    {
+        printf("Faculty: %c, StickType: %d, Employment percentage: %u%\n", 
+            faculty,
+            type,
+            employmentPercentage);
+    }
+};
 
-void get_vector_time(Vector& vec)
+#include <Vector.h>
+#include <LinkedList.h>
+
+struct Timer
+{
+    std::chrono::high_resolution_clock::time_point m_Start;
+    std::string tag;
+
+    Timer(const char* tag)
+    : tag(std::move(tag))
+    {
+        m_Start = std::chrono::high_resolution_clock::now();
+    }
+
+    ~Timer()
+    {
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<float> time = end - m_Start;
+        std::cout << "Timer of " << tag << ": " << time.count() << "s elapsed" << std::endl;
+    }
+};
+
+void get_vector_time(Vector<HogwartsStudent>& vec, int rands[20000])
 {
     std::cout << "\nVector tests:" << std::endl;
     clock_t begin;
@@ -32,7 +53,7 @@ void get_vector_time(Vector& vec)
     // 5.1 vector
     begin = clock();
     for (int i = 0; i < 50000; i++)
-        vec.push_back({static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i});
+        vec.PushBack({static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i});
     end = clock();
     time = double(end - begin) / CLOCKS_PER_SEC;
     summary += time;
@@ -42,7 +63,9 @@ void get_vector_time(Vector& vec)
     // 5.2 vector
     begin = clock();
     for (int i = 0; i < 10000; i++)
-        vec.push_front({static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i});
+        vec.PushFront(
+            {static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i}
+        );
     end = clock();
     time = double(end - begin) / CLOCKS_PER_SEC;
     summary += time;
@@ -52,7 +75,7 @@ void get_vector_time(Vector& vec)
     // 5.3 vector
     begin = clock();
     for (int i = 0; i < 20000; i++)
-        vec.get(rand() % 32768);
+        vec.Get(rands[i]);
     end = clock();
     time = double(end - begin) / CLOCKS_PER_SEC;
     summary += time;
@@ -62,7 +85,7 @@ void get_vector_time(Vector& vec)
     // 5.4 vector
     begin = clock();
     for (int i = 0; i < 5000; i++)
-        vec.pop_front();
+        vec.PopFront();
     end = clock();
     time = double(end - begin) / CLOCKS_PER_SEC;
     summary += time;
@@ -72,7 +95,7 @@ void get_vector_time(Vector& vec)
     // 5.5 vector
     begin = clock();
     for (int i = 0; i < 5000; i++)
-        vec.pop_back();
+        vec.PopBack();
     end = clock();
     time = double(end - begin) / CLOCKS_PER_SEC;
     summary += time;
@@ -80,7 +103,8 @@ void get_vector_time(Vector& vec)
     std::cout << "Vector 5.5 time: " << time << std::endl; 
     std::cout << "Vector summary: " << summary << std::endl;
 }
-void get_list_time(LinkedList& list)
+
+void get_list_time(LinkedList<HogwartsStudent>& list, int rands[20000])
 {
     std::cout << "\nLinked List tests:" << std::endl;
     clock_t begin;
@@ -90,7 +114,9 @@ void get_list_time(LinkedList& list)
     // 5.1 list
     begin = clock();
     for (int i = 0; i < 50000; i++)
-        list.push_back({static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i});
+        list.PushBack(
+            {static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i}
+        );
     end = clock();
     time = double(end - begin) / CLOCKS_PER_SEC;
     summary += time;
@@ -100,7 +126,9 @@ void get_list_time(LinkedList& list)
     // 5.2 list
     begin = clock();
     for (int i = 0; i < 10000; i++)
-        list.push_front({static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i});
+        list.PushFront(
+            {static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i}
+        );
     end = clock();
     // ~ 0.0003 second
     std::cout << "Linked List 5.2 time: " << time << std::endl;
@@ -108,7 +136,7 @@ void get_list_time(LinkedList& list)
     // 5.3 list
     begin = clock();
     for (int i = 0; i < 20000; i++)
-        list.get(rand() % 32768);
+        list.Get(rands[i]);
     end = clock();
     time = double(end - begin) / CLOCKS_PER_SEC;
     summary += time;
@@ -118,7 +146,7 @@ void get_list_time(LinkedList& list)
     // 5.4 list
     begin = clock();
     for (int i = 0; i < 5000; i++)
-        list.pop_front();
+        list.PopFront();
     end = clock();
     time = double(end - begin) / CLOCKS_PER_SEC;
     summary += time;
@@ -128,7 +156,7 @@ void get_list_time(LinkedList& list)
     // 5.5 list
     begin = clock();
     for (int i = 0; i < 5000; i++)
-        list.pop_back();
+        list.PopBack();
     end = clock();
     time = double(end - begin) / CLOCKS_PER_SEC;
     summary += time;
@@ -137,65 +165,27 @@ void get_list_time(LinkedList& list)
     std::cout << "Linked List summary: " << summary << std::endl;
 }
 
-template<typename T>
-void get_stdvec_time(std::vector<T>& vec)
-{
-    std::cout << "\nstd::vector tests:" << std::endl;
-    clock_t begin;
-    clock_t end;
-    double summary = 0;
-    double time;
-    // 5.1 std::vec
-    begin = clock();
-    for (int i = 0; i < 50000; i++)
-        vec.push_back({static_cast<char>(i + 65), StickType(i % 4), (unsigned int) i});
-    end = clock();
-    time = double(end - begin) / CLOCKS_PER_SEC;
-    summary += time;
-    // ~ 0.0002 second
-    std::cout << "std::vector 5.1 time: " << time << std::endl;
-
-    // 5.5 std::vec
-    begin = clock();
-    for (int i = 0; i < 5000; i++)
-        vec.pop_back();
-    end = clock();
-    time = double(end - begin) / CLOCKS_PER_SEC;
-    summary += time;
-    // ~ 0.00008 second
-    std::cout << "std::vector 5.5 time: " << time << std::endl; 
-    std::cout << "std::vector summary: " << summary << std::endl;
-}
-
 int main(void)
 {
-    // Vector vec;
-    LinkedList list;
-    std::vector<HogwartsStudent> stdvec;
-    Vector vec;
+    LinkedList<HogwartsStudent> list;
+    Vector<HogwartsStudent> vec;
 
-    get_vector_time(vec);
-    // get_vector_overall(vec);
-    // get_list_time(list);
-    // get_stdvec_time(stdvec);
+    int rands[20000];
+    for (int i = 0; i < 20000; i++)
+        rands[i] = rand() % 32768;
 
-    // Vector v;
-    // HogwartsStudent s;
-    // for (int i = 0; i < 4; i++)
-    //     v.push_back({(char) (i + 65), UNUSUAL, (unsigned int) i * 11});
+    get_vector_time(vec, rands);
+    get_list_time(list, rands);
 
-    // for (int i = 4; i < 8; i++)
-    //     v.push_front({(char) (i + 65), UNUSUAL, (unsigned int) i * 11});
-
-    // v.print();
-    // std::cout << "???" << std::endl;
-
-    // s = v.pop_back();
-    // s = v.pop_front();
-    
-    // v.print();
-    // std::cout << "???" << std::endl;
-
-    // v.insert(s, 5);
-    // v.print();
+    LinkedList<HogwartsStudent> l;
+    for (int i = 0; i < 5; i++)
+        l.PushFront(
+            std::move(HogwartsStudent{static_cast<char>(i + 65), RARE, (unsigned int)rand() % 100})
+        );
+    std::cout << "\nBefore reverse" << std::endl;
+    l.Print();
+    std::cout << "\nAfter reverse" << std::endl;
+    l.Reverse();
+    l.Print();
+    std::cout << "\nHas cycle?: " << l.HasCycle() << std::endl;
 }

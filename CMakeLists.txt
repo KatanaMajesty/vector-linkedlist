@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 3.2)
-project(klib-executable CXX)
+project(asd CXX)
 
-add_subdirectory(lib)
-
-add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(${PROJECT_NAME}
-    klib
+file(GLOB
+    SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 )
+
+add_executable(${PROJECT_NAME} ${SRC})
 target_include_directories(${PROJECT_NAME}
-    PUBLIC ./lib/
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src"
 )
