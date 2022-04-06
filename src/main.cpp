@@ -158,6 +158,7 @@ void get_list_time(LinkedList<HogwartsStudent>& list, int rands[20000])
 
 int main(void)
 {
+    srand(time(nullptr));
     LinkedList<HogwartsStudent> list;
     Vector<HogwartsStudent> vec;
 
